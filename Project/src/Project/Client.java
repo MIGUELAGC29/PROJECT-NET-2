@@ -13,12 +13,12 @@ public class Client {
         try{
 
             //**************LECTURA DE DATOS PARA LA CONEXION**************
-            BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));
-            System.out.printf("Escriba la direccion del servidor: ");
+            BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in)); //DEFINIMOS EL FLUJO PARA EL INGRESO DE DATOS
+            System.out.printf("Escriba la direccion del servidor: ");  //SERVIDOR
             String host = br1.readLine();
-            System.out.printf("\n\nEscriba el puerto: ");
+            System.out.printf("\n\nEscriba el puerto: ");  //PUERTO
             int pto = Integer.parseInt(br1.readLine());
-            Socket cl = new Socket(host,pto);
+            Socket cl = new Socket(host,pto);  //INICIAMOS SOCKET
             //**************LECTURA DE DATOS PARA LA CONEXION************** 
 
             //**************LECTURA DE ARCHIVOS************** 
@@ -27,27 +27,27 @@ public class Client {
 
             //**************LECTURA DE DATOS DE PRODUCTO************** 
 
-            BufferedReader br2 = new BufferedReader(new InputStreamReader(cl.getInputStream()));
-            String fileslengthstr = br2.readLine();
-            int fileslength = Integer.parseInt(fileslengthstr);
+            BufferedReader br2 = new BufferedReader(new InputStreamReader(cl.getInputStream()));  //DEFINIMOS LA LECTURA DEL FLUJO
+            String fileslengthstr = br2.readLine(); //LEEMOS LOS DATOS ENVIADOS POR EL SERVIDOR
+            int fileslength = Integer.parseInt(fileslengthstr);  //LE HACEMOS UN CAMBIO DE STRING A ENTERO
             
     
 
-            String [] nameProducts = new String[fileslength];
-            String [] priceProducts = new String[fileslength];
-            String [] descriptionProducts = new String[fileslength];
-            String [] existenceProducts = new String[fileslength];
+            String [] nameProducts = new String[fileslength];  //DEFINIMOS ARRAYS PARA GUARDAR DATOS (NOMBRE)
+            String [] priceProducts = new String[fileslength];  //(PRECIO)
+            String [] descriptionProducts = new String[fileslength];  //(DESCRIPCIÓN)
+            String [] existenceProducts = new String[fileslength];  //(EXISTENCIA)
             
 
-            for(int j = 0; j<nameProducts.length; j++){
-                String data = br2.readLine();
-                nameProducts[j] = data;
+            for(int j = 0; j<nameProducts.length; j++){  //HACEMOS UN LOOP PARA GUARDAR LOS DATOS
+                String data = br2.readLine();  //LEEMOS EL FLUJO DE DATOS
+                nameProducts[j] = data; //GUARDAMOS NOMBRE
                 data = br2.readLine();
-                priceProducts[j] = data;
+                priceProducts[j] = data;  //GUARDAMOS PRECIO
                 data = br2.readLine();
-                descriptionProducts[j] = data;
+                descriptionProducts[j] = data;  //GUARDAMOS DESCRIPCION
                 data = br2.readLine();
-                existenceProducts[j] = data;
+                existenceProducts[j] = data;  //GURDAMOS LA EXISTENCIA
 
             } 
 
@@ -65,11 +65,11 @@ public class Client {
 
 
 
-        br1.close();
-        br2.close();
-        cl.close();
+        br1.close();  //CERRAMOS FLUJO
+        br2.close();  //CERRAMOS FLUJO
+        cl.close();  
         }catch (Exception e){
-            System.out.println("Error: " + e);
+            System.out.println("Error: " + e);  //ERROR EN EL SOCKET
         }
         
     }

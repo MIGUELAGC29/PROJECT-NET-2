@@ -17,49 +17,48 @@ public class Server
         
         try
         {
-            JFileChooser jf = new JFileChooser();
+            JFileChooser jf = new JFileChooser();  //SELECCIÓN DE ARCHIVOS
             jf.setMultiSelectionEnabled(true);
             int r = jf.showOpenDialog(null);
             if ( r == JFileChooser.APPROVE_OPTION){
-                File[] files = jf.getSelectedFiles();
+                File[] files = jf.getSelectedFiles();  //OBTENEMOS UN ARRAY CON LOS ARCHIVOS SELECCIONADOS
 
 
-                String [] nameProducts = new String[files.length];
-                Float [] priceProducts = new Float[files.length];
-                String [] descriptionProducts = new String[files.length];
-                Integer [] existenceProducts = new Integer[files.length];
+                String [] nameProducts = new String[files.length];  //DEFINIMOS ARRAYS PARA GUARDAR LOS DATOS DE LOS PRODUCTOS 
+                Float [] priceProducts = new Float[files.length];  //PRECIO
+                String [] descriptionProducts = new String[files.length];  //DESCRIPCION
+                Integer [] existenceProducts = new Integer[files.length];  //EXISTENCIA
 
 
-                for(int i = 0; i < files.length; i++)
+                for(int i = 0; i < files.length; i++)  //HACEMOS UN LOOP PARA EXTRAER CADA DATO DE LOS PRODUCTOS
                 {
-                    File f = files[i];
+                    File f = files[i];  //RECORREMOS EL ARRAY QUE TIENE LOS ARCHIVOS
                     
-                    String nameFile = f.getName(); //Nombre
-                    nameFile = nameFile.replace(".jpeg", "");
-                    //System.out.println(nameFile);
-                    String sql = "SELECT * FROM Product WHERE Name = \'" + nameFile + "\';";
-                    Connection cn = null;
-                    PreparedStatement pst = null;
-                    ResultSet rs = null;
-                    cn = Conexion.conectar();
-                    pst = cn.prepareStatement(sql);                        
-                    rs = pst.executeQuery();
-                    if(rs.next()){
-                        nameProducts[i] = rs.getString(2);
-                        priceProducts[i] = rs.getFloat(3);
-                        descriptionProducts[i] = rs.getString(4);
-                        existenceProducts[i] = rs.getInt(5);
+                    String nameFile = f.getName(); //OBTENEMOS NOMBRE
+                    nameFile = nameFile.replace(".jpeg", "");  //AL NOMBRE LE QUIATMOS LA EXTENCION DEL ARCHIVO
+                    String sql = "SELECT * FROM Product WHERE Name = \'" + nameFile + "\';";  //CREAMOS EL QUERY PARA LA EXTRACCION DE DATOS EN SQL
+                    Connection cn = null;  //VARIABLE DE CONEXION A BD
+                    PreparedStatement pst = null; //VARIABLE DE CONEXION A BD
+                    ResultSet rs = null; //VARIABLE DE CONEXION A BD
+                    cn = Conexion.conectar(); //VARIABLE DE CONEXION A BD
+                    pst = cn.prepareStatement(sql); //VARIABLE DE CONEXION A BD          
+                    rs = pst.executeQuery();  //EJECUCIÓN DEL QUERY DE SQL
+                    if(rs.next()){  //INGRESAMOS VALORES A LOS ARRAYS
+                        nameProducts[i] = rs.getString(2); //NOMBRE
+                        priceProducts[i] = rs.getFloat(3);  //PRECIO 
+                        descriptionProducts[i] = rs.getString(4);  //DESCRIPCION
+                        existenceProducts[i] = rs.getInt(5);  //EXISTENCIA
                     }
 
                 }
                 
                 //*************INICIO DE SOCKET*************************
-                ServerSocket s = new ServerSocket(3080);
+                ServerSocket s = new ServerSocket(3080);  //INICIAMOS EL SOCKET EN EL PUERTO 3080
                 System.out.println("Esperando cliente....");
                 for(;;){
                     Socket cl = s.accept();
                     System.out.println("Conexión establecida desde" + cl.getInetAddress() + ": " + cl.getPort());
-                    PrintWriter pw = new PrintWriter(new OutputStreamWriter(cl.getOutputStream()));
+                    PrintWriter pw = new PrintWriter(new OutputStreamWriter(cl.getOutputStream()));  //INICIAMOS FLUJO DE DATOS
                 //*************INICIO DE SOCKET*************************    
 
 
@@ -68,24 +67,24 @@ public class Server
 
 
                 //*************ENVIO DE DATOS AL CLIENTE*************
-                    pw.println(files.length);
+                    pw.println(files.length);  //ENVIAMOS LA LONGITUD DE ARCHIVOS SELECCIONADOS
                     pw.flush();
                     
-                    for (int j = 0; j<nameProducts.length; j++)
+                    for (int j = 0; j<nameProducts.length; j++)  //MANDAMOS LOS DATOS DE CADA ARRARY
                     {
             
-                        pw.println(nameProducts[j]);
+                        pw.println(nameProducts[j]);  //NOMBRE
                         pw.flush();
-                        pw.println(priceProducts[j]);
+                        pw.println(priceProducts[j]);  //PRECIO
                         pw.flush();
-                        pw.println(descriptionProducts[j]);
+                        pw.println(descriptionProducts[j]);   //DESCRIPCIÓN
                         pw.flush();
-                        pw.println(existenceProducts[j]);
+                        pw.println(existenceProducts[j]);  //EXISTENCIA
                         pw.flush();
                     
                     }
                     
-                    pw.close();
+                    pw.close();  //CERRAMOS FLUJO DE DATOS
                 //*************ENVIO DE DATOS AL CLIENTE*************
 
                 }
@@ -93,7 +92,7 @@ public class Server
                 
             }
             else{
-                System.out.println("\n\nHubo un error con el archivo");
+                System.out.println("\n\nHubo un error con el archivo");  //ERROR AL SELECCIONAR EL ARCHIVO
             }
             
 
