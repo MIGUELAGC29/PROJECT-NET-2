@@ -1,9 +1,6 @@
 package Project;
 
 import java.net.*;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
-
 import java.io.*;
 
 
@@ -11,7 +8,6 @@ import java.io.*;
 public class Client {
     public static void main(String[] args) {
         try{
-
             //**************LECTURA DE DATOS PARA LA CONEXION**************
             BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in)); //DEFINIMOS EL FLUJO PARA EL INGRESO DE DATOS
             System.out.printf("Escriba la direccion del servidor: ");  //SERVIDOR
@@ -52,15 +48,32 @@ public class Client {
             } 
 
             
-            System.out.println("id \t Nombre \t Precio \t Descripcion \t Existencia");
-            for(int i = 0; i< nameProducts.length ; i++){
-                System.out.println(i + "\t" + nameProducts[i] + "\t" + priceProducts[i] + "\t" + descriptionProducts[i] + "\t" + existenceProducts[i]);
-            }
-            
-            
-            
             //**************LECTURA DE DATOS DE PRODUCTOS************** 
 
+            Float [] priceProductsf = new Float[fileslength];
+            Integer [] existenceProductsi = new Integer[fileslength];
+
+            for (int i = 0; i<fileslength; i++)
+            {
+                priceProductsf[i] = Float.parseFloat(priceProducts[i]);
+            }
+
+            for (int i = 0; i<fileslength; i++)
+            {
+                existenceProductsi[i] = Integer.parseInt(existenceProducts[i]);
+            }
+
+            /*    ARRAYS FINALES
+                nameProducts          String
+                priceProductsf        Float
+                descriptionProducts   String
+                existenceProducts     Integer
+            */
+
+            //**************MOSTRANDO MENU*********************
+            Menu m = new Menu(nameProducts, priceProductsf, descriptionProducts, existenceProductsi);
+            m.showMenu();
+            //**************MOSTRANDO MENU*********************
                 
 
 

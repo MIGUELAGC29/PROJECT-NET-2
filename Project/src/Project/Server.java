@@ -93,11 +93,7 @@ public class Server
             }
             else{
                 System.out.println("\n\nHubo un error con el archivo");  //ERROR AL SELECCIONAR EL ARCHIVO
-            }
-            
-
-            
-            
+            }            
             
            //cl.close();
         }
@@ -106,20 +102,6 @@ public class Server
             System.out.println("Error: " + e);
             
         }
-
-    
-        
-
-     
-
-
-        
-            
-            
-
-        
-        
-    
 
     }
 }
