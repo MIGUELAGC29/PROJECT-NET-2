@@ -1,17 +1,21 @@
 package Project;
 
-class Car extends Product{
-    int total;
-    
-    public Car(String name, float price, String description, int existence) {
-        super(name, price, description, existence);
+class Car extends Menu{
+
+    public Car(String[] nameProducts, Float[] priceProducts, String[] descriptionProducts, Integer[] existenceProducts) {
+        super(nameProducts, priceProducts, descriptionProducts, existenceProducts);
+        this.nameProducts = nameProducts;
+        this.priceProducts = priceProducts;
+        this.descriptionProducts = descriptionProducts;
+        this.existenceProducts = existenceProducts;
+    }
+
+
+    public String[] getNames(){
         
-    }
+        return this.nameProducts;
+    } 
 
-    
 
-    public int showTotal(){
-        return total;
-    }
-    
+
 }

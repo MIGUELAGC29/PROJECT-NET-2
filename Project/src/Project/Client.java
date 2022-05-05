@@ -71,8 +71,9 @@ public class Client {
             */
 
             //**************MOSTRANDO MENU*********************
+            int counterCar = 0;
             Menu m = new Menu(nameProducts, priceProductsf, descriptionProducts, existenceProductsi);
-            m.showMenu();
+            m.showMenu(counterCar);
             //**************MOSTRANDO MENU*********************
                 
 
