@@ -1,0 +1,9 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/Users/miguelagc/Downloads/pdfbox-tools-2.0.19.jar",
+        "/Users/miguelagc/Downloads/pdfbox-2.0.19.jar",
+        "/Users/miguelagc/Downloads/fontbox-2.0.19.jar",
+        "/Users/miguelagc/Downloads/commons-logging-1.2.jar"
+    ]
+}

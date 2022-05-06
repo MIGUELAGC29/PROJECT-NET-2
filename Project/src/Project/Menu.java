@@ -2,6 +2,13 @@ package Project;
 
 import java.util.Scanner;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
+
 public class Menu {
     String [] nameProducts;  
     Float [] priceProducts; 
@@ -19,12 +26,243 @@ public class Menu {
 
     public static String [] carNameProducts = new String[10]; 
     public static Float [] carPriceProducts = new Float[10];
-    public static String [] carDescriptionProducts = new String[10];;
-    public static Integer [] carExistenceProducts = new Integer[10];;
+    public static String [] carDescriptionProducts = new String[10];
+    public static Integer [] carExistenceProducts = new Integer[10];
 
 
+    public void showCar(int counterCar){
+        //  Mandamos a llamar lo que este en el carrito
+        Car c = new Car(Menu.carNameProducts, Menu.carPriceProducts, Menu.carDescriptionProducts, Menu.carExistenceProducts);
+        String [] names = c.getNames();
+        Float [] prices = c.getPrices();
+        String [] descriptions = c.getDescriptions();
+        Integer [] existences = c.getexistences();
+        
+
+        
+        if(names[0] == null)
+        {
+            System.out.println("\n\nCARRITO VACIO\n\n");
+            int opt = 0;
+            while(opt == 0){
+                System.out.println("--------------------------------");
+                System.out.println("1.- MENU PRINCIPAL");
+                System.out.println("2.- SALIR");
+                System.out.print("\n\nSELECCIONE LA OPCION: ");
+                Scanner in = new Scanner(System.in);
+                opt = in.nextInt();
+                switch(opt){
+                    case 1: 
+                        Menu m = new Menu(this.nameProducts, this.priceProducts, this.descriptionProducts, this.existenceProducts);
+                        m.showMenu(counterCar);
+                        break;
+                    case 2: 
+                        break;
+                    default:
+                        opt = 0;
+                        break;     
+                }in.close();
+            }
+                
+        }
+        else{
+            float total = 0.0f;
+            System.out.println("\n\nNombre\t\tPrecio\t\tDescripcion\t\tCantidad\t\tTotal");
+            for(int i = 0; i < names.length ; i ++)
+            {
+                if(names[i] != null)
+                {
+                    System.out.println(names[i] + "\t\t" + prices[i] + "\t\t" + descriptions[i] + "\t\t" + existences[i] + "\t\t" + prices[i]*existences[i]); 
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+
+            int opt = 0;
+            while(opt == 0){
+                System.out.println("\n\n--------------------------------");
+                System.out.println("1.- EDITAR");
+                System.out.println("2.- COMPRAR CARRITO");
+                System.out.println("3.- MENU PRINCIPAL");
+                System.out.println("4.- SALIR");
+                System.out.print("\n\nSELECCIONE LA OPCION: ");
+                Scanner in = new Scanner(System.in);
+                opt = in.nextInt();
+                switch(opt){
+                    case 1:
+                        editCar(names, prices, descriptions, existences, counterCar);
+                        break;
+                    case 2:
+                        buyCar(counterCar);
+                        break;
+                    case 3: 
+                        Menu m = new Menu(this.nameProducts, this.priceProducts, this.descriptionProducts, this.existenceProducts);
+                        m.showMenu(counterCar);
+                        break;
+                    case 4: 
+                        break;
+                    default:
+                        opt = 0;
+                        break;     
+                    }in.close();
+            }
+            
+        
+        }
     
-     
+            
+    }
+
+    public void generateReport(String[] names, Float[] prices, String[] descriptions, Integer[] existences, int counterCar){
+        try{
+            PDDocument document = new PDDocument();
+            PDPage page = new PDPage(PDRectangle.A4);
+            document.addPage(page);
+            PDPageContentStream content = new PDPageContentStream(document, page);
+
+            content.beginText();
+            content.setFont(PDType1Font.TIMES_BOLD,12);
+            content.newLineAtOffset(20, page.getMediaBox().getHeight()-52);
+            content .showText("HELLO WORLD");
+            content.endText();
+
+            content.close();
+
+            document.save("/Users/miguelagc/Desktop/REDES 2/Project/Project/src/Project/report.pdf");
+
+
+        }catch(Exception e){
+            System.out.println("Error: " + e);
+        }
+    }
+        
+    public void buyCar(int counterCar){
+        // generacion de reporte del carrito
+        Car c = new Car(Menu.carNameProducts, Menu.carPriceProducts, Menu.carDescriptionProducts, Menu.carExistenceProducts);
+        String [] names = c.getNames();
+        Float [] prices = c.getPrices();
+        String [] descriptions = c.getDescriptions();
+        Integer [] existences = c.getexistences();
+
+        if(names[0] == null)
+        {
+            System.out.println("\n\nCARRITO VACIO\n\n");
+            int opt = 0;
+            while(opt == 0){
+                System.out.println("--------------------------------");
+                System.out.println("1.- MENU PRINCIPAL");
+                System.out.println("2.- SALIR");
+                System.out.print("\n\nSELECCIONE LA OPCION: ");
+                Scanner in = new Scanner(System.in);
+                opt = in.nextInt();
+                switch(opt){
+                    case 1: 
+                        Menu m = new Menu(this.nameProducts, this.priceProducts, this.descriptionProducts, this.existenceProducts);
+                        m.showMenu(counterCar);
+                        break;
+                    case 2: 
+                        break;
+                    default:
+                        opt = 0;
+                        break;     
+                }in.close();
+            }
+                
+        }
+        else{
+            float total = 0.0f;
+            System.out.println("\n\nNombre\t\tPrecio\t\tDescripcion\t\tCantidad\t\tTotal");
+            for(int i = 0; i < names.length ; i ++)
+            {
+                if(names[i] != null)
+                {
+                    System.out.println(names[i] + "\t\t" + prices[i] + "\t\t" + descriptions[i] + "\t\t" + existences[i] + "\t\t" + prices[i]*existences[i]); 
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+
+            int opt = 0;
+            while(opt == 0){
+                System.out.println("\n\n--------------------------------");
+                System.out.println("1.- COMPRAR CARRITO (SI)");
+                System.out.println("2.- COMPRAR CARRITO (NO)");
+                System.out.println("3.- MENU PRINCIPAL");
+                System.out.println("4.- SALIR");
+                System.out.print("\n\nSELECCIONE LA OPCION: ");
+                Scanner in = new Scanner(System.in);
+                opt = in.nextInt();
+                switch(opt){
+                    case 1:
+                        generateReport(names, prices, descriptions, existences, counterCar);
+                        break;
+                    case 2:
+                        buyCar(counterCar);
+                        break;
+                    case 3: 
+                        Menu m = new Menu(this.nameProducts, this.priceProducts, this.descriptionProducts, this.existenceProducts);
+                        m.showMenu(counterCar);
+                        break;
+                    case 4: 
+                        break;
+                    default:
+                        opt = 0;
+                        break;     
+                    }in.close();
+            }
+            
+        
+        }
+    }
+
+    public void editCar(String[] names, Float[] prices, String[] descriptions, Integer[] existences, int counterCar){
+        int optionMenu = 0;
+        System.out.println("\n\nNombre\t\tPrecio\t\tDescripcion\t\tCantidad\t\tTotal");
+            for(int i = 0; i < names.length ; i ++)
+            {
+                if(names[i] != null)
+                {
+                    System.out.println(names[i] + "\t\t" + prices[i] + "\t\t" + descriptions[i] + "\t\t" + existences[i] + "\t\t" + prices[i]*existences[i] + "\n\n"); 
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+        System.out.println("1.- AGREGAR PRODUCTOS");
+        System.out.println("2.- EDITAR PRODUCTOS");
+        System.out.println("3.- ELIMINAR PRODUCTOS");
+        System.out.print("ELIGE TU POCION: ");
+        Scanner in = new Scanner(System.in);
+        optionMenu = in.nextInt();
+        switch(optionMenu){
+            case 1:
+                addProduct(counterCar);
+                break;
+            case 2: 
+                editProduct(names, prices, descriptions, existences, counterCar);
+                break;
+            case 3: 
+                deleteProduct(names, prices, descriptions, existences, counterCar);
+                break;
+            case 4:
+                break;
+            default:
+                optionMenu = 0;
+                break;     
+        }
+        in.close();
+
+
+
+    }
 
     public void addProduct(int counterCar){
 
@@ -107,56 +345,72 @@ public class Menu {
             in.close();
     }
 
-
-
-    public void showCar(int counterCar){
-        //  Mandamos a llamar lo que este en el carrito
-        Car c = new Car(Menu.carNameProducts, Menu.carPriceProducts, Menu.carDescriptionProducts, Menu.carExistenceProducts);
-        String[] nombres = c.getNames();
-        if(nombres.length == 0){
-            System.out.println("CARRITO VACIO");
-        }
-        else{
-            System.out.println("\n\n\n\n*************** MOSTRANDO BANDAAAAAAAAAAA ****************");
-            for(int i = 0; i<nombres.length ; i++){
-                System.out.println("\n" + carNameProducts[i] + "\t\t" + carPriceProducts[i] + "\t\t" + carDescriptionProducts[i] + "\t\t" + carExistenceProducts[i]);
-
+    public void editProduct(String[] names, Float[] prices, String[] descriptions, Integer[] existences, int counterCar)
+    {
+        System.out.println("    \n\nNombre\t\tPrecio\t\tDescripcion\t\tCantidad\t\tTotal\n");
+        for(int i = 0; i < names.length ; i ++)
+        {
+            if(names[i] != null)
+            {
+                System.out.println(i+1 + ")  " + names[i] + "\t\t" + prices[i] + "\t\t" + descriptions[i] + "\t\t" + existences[i] + "\t\t" + prices[i]*existences[i]); 
+            }
+            else
+            {
+                break;
             }
         }
-        int opt = 0;
-        while(opt == 0){
-            System.out.println("--------------------------------");
-            System.out.println("1.- COMPRAR CARRITO");
-            System.out.println("2.- MENU PRINCIPAL");
-            System.out.println("3.- SALIR");
-            Scanner in = new Scanner(System.in);
-            opt = in.nextInt();
-            switch(opt){
-                case 1:
-                    buyCar();
-                    break;
-                case 2: 
-                    Menu m = new Menu(this.nameProducts, this.priceProducts, this.descriptionProducts, this.existenceProducts);
-                    m.showMenu(counterCar);
-                    break;
-                case 3: 
-                    break;
-                default:
-                    opt = 0;
-                    break;     
+        System.out.print("\n\nSELECCIONA EL NUMERO DEL PRODUCTO A EDITAR: ");
+        int optionProduct = 0;
+        Scanner on = new Scanner(System.in);
+        optionProduct = on.nextInt();
+        optionProduct = optionProduct - 1;
+        System.out.println("\n\n" + optionProduct + ")  " + names[optionProduct] + "\t\t" + prices[optionProduct] + "\t\t" + descriptions[optionProduct] + "\t\t" + existences[optionProduct] + "\t\t" + prices[optionProduct]*existences[optionProduct]);
+        System.out.print("INGRESA LA NUEVA CANTIDAD DE PRODUCTOS A COMPRAR: ");
+        int newCant = 0;
+        Scanner or = new Scanner(System.in);
+        newCant = or.nextInt();
+        existences[optionProduct] = newCant;
+        System.out.println("\n\n***********************************************");
+        System.out.println("***********************************************");
+        System.out.println("************ EDITADO EXITOSAMENTE *************");
+        System.out.println("***********************************************");
+        System.out.println("***********************************************");
+        showMenu(counterCar);
+
+
+    }
+
+    public void deleteProduct(String[] names, Float[] prices, String[] descriptions, Integer[] existences, int counterCar)
+    {
+        System.out.println("    \n\nNombre\t\tPrecio\t\tDescripcion\t\tCantidad\t\tTotal\n");
+        for(int i = 0; i < names.length ; i ++)
+        {
+            if(names[i] != null)
+            {
+                System.out.println(i+1 + ")  " + names[i] + "\t\t" + prices[i] + "\t\t" + descriptions[i] + "\t\t" + existences[i] + "\t\t" + prices[i]*existences[i]); 
             }
-            in.close();
-            
+            else
+            {
+                break;
+            }
         }
-        
-        
+        System.out.print("\n\nSELECCIONA EL NUMERO DEL PRODUCTO A ELIMINAR: ");
+        int optionProduct = 0;
+        Scanner on = new Scanner(System.in);
+        optionProduct = on.nextInt();
+        optionProduct = optionProduct - 1;
+        names[optionProduct] = null;
+        prices[optionProduct] = null;
+        descriptions[optionProduct] = null;
+        existences[optionProduct] = null;
+
+        System.out.println("\n\n***********************************************");
+        System.out.println("***********************************************");
+        System.out.println("************ ELIMINADO EXITOSAMENTE ***********");
+        System.out.println("***********************************************");
+        System.out.println("***********************************************");
+        showMenu(counterCar);
     }
-
-    public void buyCar(){
-        // generacion de reporte del carrito
-    }
-
-
 
     public void showMenu(int counterCar){
         int optionMenu = 0;
@@ -179,7 +433,7 @@ public class Menu {
                     showCar(counterCar);
                     break;
                 case 3: 
-                    buyCar();
+                    buyCar(counterCar);
                     break;
                 case 4:
                     break;
