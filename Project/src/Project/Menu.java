@@ -119,16 +119,99 @@ public class Menu {
     public void generateReport(String[] names, Float[] prices, String[] descriptions, Integer[] existences, int counterCar){
         try{
             PDDocument document = new PDDocument();
-            PDPage page = new PDPage(PDRectangle.A4);
+            PDPage page = new PDPage(PDRectangle.A6);
             document.addPage(page);
             PDPageContentStream content = new PDPageContentStream(document, page);
 
             content.beginText();
-            content.setFont(PDType1Font.TIMES_BOLD,12);
-            content.newLineAtOffset(20, page.getMediaBox().getHeight()-52);
-            content .showText("HELLO WORLD");
+            content.setFont(PDType1Font.TIMES_BOLD,30);
+            content.newLineAtOffset(90, page.getMediaBox().getHeight()-50);
+            content .showText("TICKET");
             content.endText();
 
+            float total = 0.0f;
+            for(int i = 0; i<names.length; i++){
+                if(prices[i] != null){
+                    total = total + prices[i] * existences[i];
+                    
+                }
+                else{
+                    break;
+                }
+                
+            }
+
+            content.beginText();
+            content.setFont(PDType1Font.TIMES_BOLD,20);
+            content.newLineAtOffset(33, page.getMediaBox().getHeight()-340);
+            content .showText("TOTAL: $" + total);
+            content.endText();
+
+            content.beginText();
+            content.setFont(PDType1Font.TIMES_BOLD,10);
+            content.newLineAtOffset(33, page.getMediaBox().getHeight()-100);
+            content .showText("Nombre          Precio          Descripción            Cantidad");
+            content.endText();
+            int counter = 10;
+            for(int i = 0; i< names.length; i++)
+            {
+                
+                content.beginText();
+                content.setFont(PDType1Font.TIMES_BOLD,10);
+                content.newLineAtOffset(33, page.getMediaBox().getHeight()-(130 + counter));
+                if(names[i] != null)
+                {
+                    content .showText(names[i]);
+                }
+                else{
+                    break;
+                }
+                content.endText();
+
+
+                content.beginText();
+                content.setFont(PDType1Font.TIMES_BOLD,10);
+                content.newLineAtOffset(98, page.getMediaBox().getHeight()-(130 + counter));
+                if(names[i] != null)
+                {
+                    content .showText("" + prices[i]);
+                }
+                else{
+                    break;
+                }
+                content.endText();
+
+                content.beginText();
+                content.setFont(PDType1Font.TIMES_BOLD,10);
+                content.newLineAtOffset(145, page.getMediaBox().getHeight()-(130 + counter));
+                if(names[i] != null)
+                {
+                    content .showText("" + descriptions[i]);
+                }
+                else{
+                    break;
+                }
+                content.endText();
+
+                content.beginText();
+                content.setFont(PDType1Font.TIMES_BOLD,10);
+                content.newLineAtOffset(240, page.getMediaBox().getHeight()-(130 + counter));
+                if(names[i] != null)
+                {
+                    content .showText("" + existences[i]);
+                }
+                else{
+                    break;
+                }
+                content.endText();
+
+                counter = counter + 10;
+            }
+
+            
+            
+            
+        
             content.close();
 
             document.save("/Users/miguelagc/Desktop/REDES 2/Project/Project/src/Project/report.pdf");
