@@ -3,89 +3,98 @@ package Project;
 import java.net.*;
 import java.io.*;
 
-
-
 public class Client {
     public static void main(String[] args) {
-        try{
-            //**************LECTURA DE DATOS PARA LA CONEXION**************
-            BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in)); //DEFINIMOS EL FLUJO PARA EL INGRESO DE DATOS
-            System.out.printf("Escriba la direccion del servidor: ");  //SERVIDOR
+        try {
+            // **************LECTURA DE DATOS PARA LA CONEXION**************
+            BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in)); // DEFINIMOS EL FLUJO PARA EL
+                                                                                       // INGRESO DE DATOS
+            System.out.printf("Escriba la direccion del servidor: "); // SERVIDOR
             String host = br1.readLine();
-            System.out.printf("\n\nEscriba el puerto: ");  //PUERTO
+            System.out.printf("\n\nEscriba el puerto: "); // PUERTO
             int pto = Integer.parseInt(br1.readLine());
-            Socket cl = new Socket(host,pto);  //INICIAMOS SOCKET
-            //**************LECTURA DE DATOS PARA LA CONEXION************** 
+            Socket cl = new Socket(host, pto); // INICIAMOS SOCKET
+            // **************LECTURA DE DATOS PARA LA CONEXION**************
 
-            //**************LECTURA DE ARCHIVOS************** 
-            //**************LECTURA DE ARCHIVOS************** 
+            // **************LECTURA DE ARCHIVOS**************
+            /*DataInputStream dis = new DataInputStream(cl.getInputStream());
+            byte[] b = new byte[1024];
+            String nombre = dis.readUTF();
+            System.out.println(nombre);
+            System.out.println("\n\nRecibimos el archivo: " + nombre);
+            long tam = dis.readLong();
+            DataOutputStream dos = new DataOutputStream(new FileOutputStream(nombre));
+            long recibidos = 0;
+            int n, porcentaje;
 
+            while (recibidos < tam) {
+                n = dis.read(b);
+                dos.write(b, 0, n);
+                dos.flush();
+                recibidos = recibidos + n;
+                porcentaje = (int) (recibidos * 100 / tam);
+                //System.out.print("\n\nArchivo " + nombre + " - Recibido al " + porcentaje + "%");
+            }*/
 
-            //**************LECTURA DE DATOS DE PRODUCTO************** 
+            // **************LECTURA DE ARCHIVOS**************
 
-            BufferedReader br2 = new BufferedReader(new InputStreamReader(cl.getInputStream()));  //DEFINIMOS LA LECTURA DEL FLUJO
-            String fileslengthstr = br2.readLine(); //LEEMOS LOS DATOS ENVIADOS POR EL SERVIDOR
-            int fileslength = Integer.parseInt(fileslengthstr);  //LE HACEMOS UN CAMBIO DE STRING A ENTERO
-            
-    
+            // **************LECTURA DE DATOS DE PRODUCTO**************
 
-            String [] nameProducts = new String[fileslength];  //DEFINIMOS ARRAYS PARA GUARDAR DATOS (NOMBRE)
-            String [] priceProducts = new String[fileslength];  //(PRECIO)
-            String [] descriptionProducts = new String[fileslength];  //(DESCRIPCIÓN)
-            String [] existenceProducts = new String[fileslength];  //(EXISTENCIA)
-            
+            BufferedReader br2 = new BufferedReader(new InputStreamReader(cl.getInputStream())); // DEFINIMOS LA LECTURA
+                                                                                                 // DEL FLUJO
+            String fileslengthstr = br2.readLine(); // LEEMOS LOS DATOS ENVIADOS POR EL SERVIDOR
+            int fileslength = Integer.parseInt(fileslengthstr); // LE HACEMOS UN CAMBIO DE STRING A ENTERO
 
-            for(int j = 0; j<nameProducts.length; j++){  //HACEMOS UN LOOP PARA GUARDAR LOS DATOS
-                String data = br2.readLine();  //LEEMOS EL FLUJO DE DATOS
-                nameProducts[j] = data; //GUARDAMOS NOMBRE
+            String[] nameProducts = new String[fileslength]; // DEFINIMOS ARRAYS PARA GUARDAR DATOS (NOMBRE)
+            String[] priceProducts = new String[fileslength]; // (PRECIO)
+            String[] descriptionProducts = new String[fileslength]; // (DESCRIPCIÓN)
+            String[] existenceProducts = new String[fileslength]; // (EXISTENCIA)
+
+            for (int j = 0; j < nameProducts.length; j++) { // HACEMOS UN LOOP PARA GUARDAR LOS DATOS
+                String data = br2.readLine(); // LEEMOS EL FLUJO DE DATOS
+                nameProducts[j] = data; // GUARDAMOS NOMBRE
                 data = br2.readLine();
-                priceProducts[j] = data;  //GUARDAMOS PRECIO
+                priceProducts[j] = data; // GUARDAMOS PRECIO
                 data = br2.readLine();
-                descriptionProducts[j] = data;  //GUARDAMOS DESCRIPCION
+                descriptionProducts[j] = data; // GUARDAMOS DESCRIPCION
                 data = br2.readLine();
-                existenceProducts[j] = data;  //GURDAMOS LA EXISTENCIA
+                existenceProducts[j] = data; // GURDAMOS LA EXISTENCIA
 
-            } 
+            }
 
-            
-            //**************LECTURA DE DATOS DE PRODUCTOS************** 
+            // **************LECTURA DE DATOS DE PRODUCTOS**************
 
-            Float [] priceProductsf = new Float[fileslength];
-            Integer [] existenceProductsi = new Integer[fileslength];
+            Float[] priceProductsf = new Float[fileslength];
+            Integer[] existenceProductsi = new Integer[fileslength];
 
-            for (int i = 0; i<fileslength; i++)
-            {
+            for (int i = 0; i < fileslength; i++) {
                 priceProductsf[i] = Float.parseFloat(priceProducts[i]);
             }
 
-            for (int i = 0; i<fileslength; i++)
-            {
+            for (int i = 0; i < fileslength; i++) {
                 existenceProductsi[i] = Integer.parseInt(existenceProducts[i]);
             }
 
-            /*    ARRAYS FINALES
-                nameProducts          String
-                priceProductsf        Float
-                descriptionProducts   String
-                existenceProducts     Integer
-            */
+            /*
+             * ARRAYS FINALES
+             * nameProducts String
+             * priceProductsf Float
+             * descriptionProducts String
+             * existenceProducts Integer
+             */
 
-            //**************MOSTRANDO MENU*********************
+            // **************MOSTRANDO MENU*********************
             int counterCar = 0;
             Menu m = new Menu(nameProducts, priceProductsf, descriptionProducts, existenceProductsi);
             m.showMenu(counterCar);
-            //**************MOSTRANDO MENU*********************
-                
+            // **************MOSTRANDO MENU*********************
 
-
-
-        br1.close();  //CERRAMOS FLUJO
-        br2.close();  //CERRAMOS FLUJO
-        cl.close();  
-        }catch (Exception e){
-            System.out.println("Error: " + e);  //ERROR EN EL SOCKET
+            br1.close(); // CERRAMOS FLUJO
+            br2.close(); // CERRAMOS FLUJO
+            //cl.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e); // ERROR EN EL SOCKET
         }
-        
+
     }
 }
- 

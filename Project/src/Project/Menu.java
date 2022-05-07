@@ -42,21 +42,25 @@ public class Menu {
         
         if(names[0] == null)
         {
-            System.out.println("\n\nCARRITO VACIO\n\n");
+            System.out.println("\n\n***** CARRITO VACIO *****\n\n");
             int opt = 0;
             while(opt == 0){
                 System.out.println("--------------------------------");
-                System.out.println("1.- MENU PRINCIPAL");
-                System.out.println("2.- SALIR");
+                System.out.println("1.- AGREGAR PRODUCTOS");
+                System.out.println("2.- MENU PRINCIPAL");
+                System.out.println("3.- SALIR");
                 System.out.print("\n\nSELECCIONE LA OPCION: ");
                 Scanner in = new Scanner(System.in);
                 opt = in.nextInt();
                 switch(opt){
-                    case 1: 
+                    case 1:
+                        addProduct(counterCar);
+                        break;
+                    case 2: 
                         Menu m = new Menu(this.nameProducts, this.priceProducts, this.descriptionProducts, this.existenceProducts);
                         m.showMenu(counterCar);
                         break;
-                    case 2: 
+                    case 3: 
                         break;
                     default:
                         opt = 0;
@@ -86,7 +90,7 @@ public class Menu {
                 System.out.println("\n\n--------------------------------");
                 System.out.println("1.- EDITAR");
                 System.out.println("2.- COMPRAR CARRITO");
-                System.out.println("3.- MENU PRINCIPAL");
+                System.out.println("3.- AGREGAR PRODUCTOS");
                 System.out.println("4.- SALIR");
                 System.out.print("\n\nSELECCIONE LA OPCION: ");
                 Scanner in = new Scanner(System.in);
@@ -99,8 +103,7 @@ public class Menu {
                         buyCar(counterCar);
                         break;
                     case 3: 
-                        Menu m = new Menu(this.nameProducts, this.priceProducts, this.descriptionProducts, this.existenceProducts);
-                        m.showMenu(counterCar);
+                        addProduct(counterCar);
                         break;
                     case 4: 
                         break;
@@ -311,18 +314,18 @@ public class Menu {
             {
                 if(names[i] != null)
                 {
-                    System.out.println(names[i] + "\t\t" + prices[i] + "\t\t" + descriptions[i] + "\t\t" + existences[i] + "\t\t" + prices[i]*existences[i] + "\n\n"); 
+                    System.out.println(names[i] + "\t\t" + prices[i] + "\t" + descriptions[i] + "\t" + existences[i] + "\t" + prices[i]*existences[i]); 
                 }
                 else
                 {
                     break;
                 }
             }
-
-        System.out.println("1.- AGREGAR PRODUCTOS");
+        
+        System.out.println("\n\n1.- AGREGAR PRODUCTOS");
         System.out.println("2.- EDITAR PRODUCTOS");
         System.out.println("3.- ELIMINAR PRODUCTOS");
-        System.out.print("ELIGE TU POCION: ");
+        System.out.print("\nELIGE TU OPCION: ");
         Scanner in = new Scanner(System.in);
         optionMenu = in.nextInt();
         switch(optionMenu){
@@ -361,21 +364,20 @@ public class Menu {
             {
                 Product p = new Product(this.nameProducts[i], this.priceProducts[i], this.descriptionProducts[i], this.existenceProducts[i]);
                 System.out.println((i+1) + ")   " + p.getName() + "\t\t  " + p.getPrice() + "\t\t\t" + p.getDescription() + "\t\t   " + p.getExistence());
-                
+
                 counter = i;
             }
-        System.out.println("\n\n" + ( counter + 2) + ") SALIR");
         System.out.print("\nSELECCIONE SU PRODUCTO: ");
         Scanner in = new Scanner(System.in);
         optionProduct = in.nextInt();
             
         if (optionProduct > nameProducts.length){
-            System.out.println("DATO INGRESALO INVALIDAMENTE");
+            System.out.println("\n\n**** DATO INGRESADO INVALIDAMENTE ****");
             optionProduct = 0;
             addProduct(counterCar);
             
         } else if (optionProduct <= 0){
-            System.out.println("DATO INGRESALO INVALIDAMENTE");
+            System.out.println("\n\n**** DATO INGRESALO INVALIDAMENTE ****");
             optionProduct = 0;
             addProduct(counterCar);
         } else{
@@ -388,11 +390,13 @@ public class Menu {
             {
                 unitBuy = in.nextInt();
                 if(unitBuy > existenceProducts[optionProduct - 1 ]){
-                    System.out.println("UNIDADES EXCEDIERON EL STOCK");
+                    System.out.println("\n\n**** UNIDADES EXCEDIERON EL STOCK *****");
+                    addProduct(counterCar);
                     unitBuy = 0;
                 }
                 else if(unitBuy <= 0){
-                    System.out.println("UNIDADES DEBEN SER MAYOR A CERO");
+                    System.out.println("\n\n**** UNIDADES DEBEN SER MAYOR A CERO ****");
+                    addProduct(counterCar);
                     unitBuy = 0;
                 }
                 else{
@@ -410,7 +414,7 @@ public class Menu {
                         }
                     }
                     
-                    
+                   
                     carNameProducts[counterCar] = nameProducts[optionProduct-1];
                     carPriceProducts[counterCar] = priceProducts[optionProduct-1];
                     carDescriptionProducts[counterCar] = descriptionProducts[optionProduct-1];
@@ -430,11 +434,13 @@ public class Menu {
 
     public void editProduct(String[] names, Float[] prices, String[] descriptions, Integer[] existences, int counterCar)
     {
+        int counterp = 0;
         System.out.println("    \n\nNombre\t\tPrecio\t\tDescripcion\t\tCantidad\t\tTotal\n");
         for(int i = 0; i < names.length ; i ++)
         {
             if(names[i] != null)
             {
+                counterp = counterp + 1;
                 System.out.println(i+1 + ")  " + names[i] + "\t\t" + prices[i] + "\t\t" + descriptions[i] + "\t\t" + existences[i] + "\t\t" + prices[i]*existences[i]); 
             }
             else
@@ -447,12 +453,45 @@ public class Menu {
         Scanner on = new Scanner(System.in);
         optionProduct = on.nextInt();
         optionProduct = optionProduct - 1;
-        System.out.println("\n\n" + optionProduct + ")  " + names[optionProduct] + "\t\t" + prices[optionProduct] + "\t\t" + descriptions[optionProduct] + "\t\t" + existences[optionProduct] + "\t\t" + prices[optionProduct]*existences[optionProduct]);
-        System.out.print("INGRESA LA NUEVA CANTIDAD DE PRODUCTOS A COMPRAR: ");
-        int newCant = 0;
-        Scanner or = new Scanner(System.in);
-        newCant = or.nextInt();
-        existences[optionProduct] = newCant;
+        if(optionProduct < counterp)
+        {
+            System.out.println("\n\n" + (optionProduct +1) + ")  " + names[optionProduct] + "\t\t" + prices[optionProduct] + "\t\t" + descriptions[optionProduct] + "\t\t" + existences[optionProduct] + "\t\t" + prices[optionProduct]*existences[optionProduct]);
+            System.out.print("\n\nINGRESA LA NUEVA CANTIDAD DE PRODUCTOS A COMPRAR: ");
+            int newCant = 0;
+            Scanner or = new Scanner(System.in);
+            newCant = or.nextInt();
+           
+            if(newCant > 0 )
+            {
+                
+                for(int i = 0; i<this.nameProducts.length; i++)
+                {
+                    if (names[optionProduct] == this.nameProducts[i])
+                    {
+                        int res = existences[optionProduct] - newCant;
+                        if(res < 0)
+                        {
+                            this.existenceProducts[i] = this.existenceProducts[i] + res;
+                        }
+                        
+                        
+                    }
+                }
+                existences[optionProduct] = newCant;
+                
+            }
+            else{
+                System.out.println("\n\n**** CANTIDAD NO VALIDA ****");
+                editProduct(names, prices, descriptions, existences, counterCar);
+            }
+        }
+        else
+        {
+            System.out.println("**** SELECCION FUERA DE RANGO ****");
+            editProduct(names, prices, descriptions, existences, counterCar);
+
+        }
+        
         System.out.println("\n\n***********************************************");
         System.out.println("***********************************************");
         System.out.println("************ EDITADO EXITOSAMENTE *************");
@@ -482,10 +521,25 @@ public class Menu {
         Scanner on = new Scanner(System.in);
         optionProduct = on.nextInt();
         optionProduct = optionProduct - 1;
+
+        for(int i = 0; i<this.nameProducts.length; i++)
+        {
+            if (names[optionProduct] == this.nameProducts[i])
+            {
+                this.existenceProducts[i] = this.existenceProducts[i] + existences[optionProduct]; 
+                        
+                        
+            }
+        }
+                
+
+
+        
         names[optionProduct] = null;
         prices[optionProduct] = null;
         descriptions[optionProduct] = null;
         existences[optionProduct] = null;
+        
 
         System.out.println("\n\n***********************************************");
         System.out.println("***********************************************");
@@ -508,22 +562,29 @@ public class Menu {
             System.out.print("ELIGE LA OPCION: ");
             Scanner in = new Scanner(System.in);
             optionMenu = in.nextInt();
-            switch(optionMenu){
-                case 1:
-                    addProduct(counterCar);
-                    break;
-                case 2: 
-                    showCar(counterCar);
-                    break;
-                case 3: 
-                    buyCar(counterCar);
-                    break;
-                case 4:
-                    break;
-                default:
-                    optionMenu = 0;
-                    break;     
+            if(optionMenu >4 || optionMenu<0){
+                System.out.println("\n\n**** OPCION INCORRECTA ****");
+                showMenu(counterCar);
+            }else{
+                switch(optionMenu){
+                    case 1:
+                        addProduct(counterCar);
+                        break;
+                    case 2: 
+                        showCar(counterCar);
+                        break;
+                    case 3: 
+                        buyCar(counterCar);
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        
+                        optionMenu = 0;
+                        break;     
+                }
             }
+            
             in.close();
             
         }
