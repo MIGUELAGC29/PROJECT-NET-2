@@ -4,7 +4,7 @@ class Car extends Menu{
     String [] carNameProducts;  
     Float [] carPriceProducts; 
     String [] carDescriptionProducts;
-    Integer [] carExistenceProducts;
+    Integer [] carStockProducts;
 
     
 
@@ -13,7 +13,7 @@ class Car extends Menu{
         this.carNameProducts = carNameProducts;
         this.carPriceProducts = carPriceProducts;
         this.carDescriptionProducts = carDescriptionProducts;
-        this.carExistenceProducts = carExistenceProducts;
+        this.carStockProducts = carStockProducts;
     }
 
 
@@ -32,7 +32,7 @@ class Car extends Menu{
     } 
     public Integer[] getexistences(){
     
-        return this.carExistenceProducts;
+        return this.carStockProducts;
     } 
     
 

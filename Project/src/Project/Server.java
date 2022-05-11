@@ -28,15 +28,13 @@ public class Server {
                 if (r == JFileChooser.APPROVE_OPTION) 
                 {
                     File[] files = jf.getSelectedFiles(); // OBTENEMOS UN ARRAY CON LOS ARCHIVOS SELECCIONADOS
-                    for (int i = 0; i < files.length; i++) 
+                    /*for (int i = 0; i < files.length; i++) 
                     {
 
                         File f = files[i];
-                        /*String archivo = f.getAbsolutePath(); // Direccion
+                        String archivo = f.getAbsolutePath(); // Direccion
                         String nombre = f.getName(); // Nombre
                         long tam = f.length(); // Tamaño
-                        System.out.println(nombre);
-
                         DataOutputStream dos = new DataOutputStream(cl.getOutputStream()); // crea un flujo de datos
                                                                                            // para la salida de datos
                                                                                            // (escribir)
@@ -63,8 +61,8 @@ public class Server {
                         }
                         //System.out.print("\n\nArchivo " + nombre + " enviado \n");
                         // dos.close();
-                        //dis.close();*/
-                    }
+                        //dis.close();
+                    }*/
                     //*************ENVIO DE ARCHIVOS AL CLIENTE*************
             
             
