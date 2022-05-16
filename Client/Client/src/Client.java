@@ -19,6 +19,8 @@ public class Client {
 
             int counter = 0;
             int c = 0;
+            Socket cr = new Socket(host, pto);
+            cr.close();
             while (counter == 0) 
             {
                 
@@ -50,10 +52,11 @@ public class Client {
                 
                 if(c == record)
                 {
-                    
+                    cl.close();
                     counter = 1;
                 }
                 c = c +1;
+                cl.close();
             }
         } catch (Exception e) {
             //System.out.println("Error: " + e); // ERROR EN EL SOCKET
@@ -65,9 +68,20 @@ public class Client {
     public static void getData(String host, int pto)
     {
         
-        System.out.println("\nQUIUBOLE");
+        System.out.println("\n");
         try{
-            Socket cl = new Socket(host, pto);
+            try {
+                for (int i = 0; i < 2; i++) {
+                    Thread.sleep(1000);
+                    System.out.println("Cargando....");
+                }
+            }catch(Exception e) {
+                System.out.println("Error Timer: " + e);
+            }
+
+
+            
+            Socket cl = new Socket(host, 3090);
             BufferedReader br2 = new BufferedReader(new InputStreamReader(cl.getInputStream()));
             String fileslengthstr = br2.readLine(); // LEEMOS LOS DATOS ENVIADOS POR EL SERVIDOR
             int fileslength = Integer.parseInt(fileslengthstr); // LE HACEMOS UN CAMBIO DE STRING A ENTERO
@@ -114,12 +128,14 @@ public class Client {
             */
 
             int counterCar = 0;
+            br2.close();
+            cl.close();
             Menu m = new Menu(nameProducts, priceProductsf, descriptionProducts, existenceProductsi);
             m.showMenu(counterCar);
 
 
         }catch(Exception e){
-            System.out.println("Error: ");
+            System.out.println("Error: " + e);
         }
         
 

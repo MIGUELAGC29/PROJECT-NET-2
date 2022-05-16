@@ -103,7 +103,7 @@ public class Menu {
                 
                 
 
-            document.save("/Users/miguelagc/Desktop/REDES 2/Project/Project/src/Project/report.pdf");
+            document.save("/Users/miguelagc/Desktop/REDES 2/Project/Client/report.pdf");
 
 
         }catch(Exception e){
