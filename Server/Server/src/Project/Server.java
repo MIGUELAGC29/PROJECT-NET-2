@@ -13,155 +13,83 @@ public class Server {
    
 
     
-    public static void main(String[] args) {
+    public static void main(String[] args) {  //METODO MAIN
         server();
 
     }
 
-    public static void server()
+    public static void server()  //INICIAMOS SERVER
     {
         try 
         {
             System.out.println("\n\nEsperando cliente....");
             ServerSocket s = new ServerSocket(3080); // INICIAMOS EL SOCKET EN EL PUERTO 3080
-            Socket cr = s.accept();
-            cr.close();
+            Socket cr = s.accept(); //ACEPTAMOS LA CONEXION 
+            cr.close(); //CERRAMOS EL SOCKET, SOLO SE HACE PARA ESPERAR LA CONEXION DEL USUARIO
             int e = 0;
-            for(;;)
+            for(;;)  //INICIAMOS UN BUCLE PARA EL ENVIIO DE DATOS
             {
                 
-                File [] files = selectFiles();
-                a = files.length;
+                File [] files = selectFiles(); //OBTENEMOS LOS ARCHIVOS QUE ENVIAREMOS AL USUARIO
+                a = files.length; //CANTIDAD DE ARCHIVOS
                 
                 
-                for(int i = 0; i<files.length; i++)
+                for(int i = 0; i<files.length; i++) //RECORREMOS EL ARRAY DE ARCHIVOS PARA ENVIARLOS
                 {
-                    Socket cl = s.accept();
+                    Socket cl = s.accept();  //ACEPTAMOS CONEXION DE OTRO UN SOCKET PARA ENVIAR 1 ARCHIVO
                     File f = files[i];
-                    String archivo = f.getAbsolutePath(); //Direccion
-                    String nombre = f.getName(); //Nombre
-                    long tam = f.length(); //Tamaño
+                    String archivo = f.getAbsolutePath(); //OBTENEMOS DIRECCION
+                    String nombre = f.getName(); //OBTENEMOS NOMBRE
+                    long tam = f.length(); //OBTENEMOS TAMAÑO
 
-                    DataOutputStream dos = new DataOutputStream(cl.getOutputStream());          //crea un flujo de datos para la salida de datos (escribir)
-                    DataInputStream dis = new DataInputStream(new FileInputStream(archivo));    //crea un flujo de datos para leer el archivo    (leer)
-                    dos.writeInt(files.length);
+                    DataOutputStream dos = new DataOutputStream(cl.getOutputStream());          //FLUJO DE DATOS PARA ESCRIBIR
+                    DataInputStream dis = new DataInputStream(new FileInputStream(archivo));    //FLUJO DE DATOS PARA LEER
+                    dos.writeInt(files.length); //ENVIAMOS LA CANTIDAD DE ARCHIVOS
                     dos.flush();
-                    dos.writeUTF(nombre);              //envia el nombre al servidor 
-                    dos.flush();                       //limpia el flujo de datos
-                    dos.writeLong(tam);                //envia el tamaño del archivo
+                    dos.writeUTF(nombre); //ENVIAMOS EL NOMBRE              
+                    dos.flush();                       
+                    dos.writeLong(tam);  //ENVIAMOS EL TAMAÑO
                     dos.flush();  
 
-                    byte[] b = new byte[1024];         //array donde se guardara lo leido del archivo
+                    byte[] b = new byte[1024];         //GUARDAMOS EL CONTENIDO EN UN ARRAY TIPO BYTE
                     long enviados = 0;
                     int n;
-                    while(enviados < tam)              //mientras los bytes enviados sean menor que el tamaño
+                    while(enviados < tam)              //HACEMOS UN LOOP PARA ENVIAR EL CONTENIDO
                     {
-                        n = dis.read(b);               //lee lo que tiene de contenido el archivo en bytes
-                        dos.write(b,0,n);          //escribe lo que tiene el array 
+                        n = dis.read(b);               
+                        dos.write(b,0,n);          //MANDA EL CONTENIDO DEL ARCHIVO
                         dos.flush();
                         enviados = enviados + n;       
                         
                     }
-                    System.out.println("Archivo " + nombre + " enviado" );
+                    System.out.println("Archivo " + nombre + " enviado" );  //ANUNCIAMOS QUE SE ENVIO EL ARCHIVO
                     cl.close();
                     dis.close();
                     dos.close();
-                    e = e +1;
+                    e = e +1;  //CONTADOR PARA SABER CUANDO YA TERMINO DE ENVIAR LOS ARCHIVOS
                 }
-                if(e == files.length)
+                if(e == files.length)   //SI YA TERMINA DE ENVIAR LOS ARCHIVOS CIERRA EL SOCKET Y MANDA A LLAMAR LA FUNCION QUE ENVIARA LOS DATOS DE LOS PRODUCTOS
                 {
-                    s.close();
-                    sendData(files);
-                    break;
+                    s.close(); //CERRAMOS SOCKET
+                    sendData(files);  //FUNCION PARA ENVIAR DATOS DE PRODUCTOS OBTENIDOS EN UNA BASE DE DATOS
+                    break; //TERMINAMOS LOOP
                     
                 }
 
             }
 
             
-
-
-
-            /*System.out.println("\n\nSelecciona los archivos: ");
-            // *************INICIO DE SOCKET*************************
-            ServerSocket s = new ServerSocket(3080); // INICIAMOS EL SOCKET EN EL PUERTO 3080
-
-
-
-            JFileChooser jf = new JFileChooser(); // SELECCIÓN DE ARCHIVOS
-            jf.setMultiSelectionEnabled(true);
-            int r = jf.showOpenDialog(null);
-            for (;;) 
-            {
-                
-                if (r == JFileChooser.APPROVE_OPTION) 
-                {
-                    File[] files = jf.getSelectedFiles();
-                    a = files.length;
-                    int e = 0;
-                    System.out.println("\nEsperando cliente....\n");
-                    for(int i = 0; i<files.length; i++)
-                    {
-                        Socket cl = s.accept();
-                        
-                        //System.out.println("Conexión establecida desde" + cl.getInetAddress() + ": " + cl.getPort());
-                        File f = files[i];
-                        String archivo = f.getAbsolutePath(); //Direccion
-                        String nombre = f.getName(); //Nombre
-                        long tam = f.length(); //Tamaño
-
-                        DataOutputStream dos = new DataOutputStream(cl.getOutputStream());          //crea un flujo de datos para la salida de datos (escribir)
-                        DataInputStream dis = new DataInputStream(new FileInputStream(archivo));    //crea un flujo de datos para leer el archivo    (leer)
-                        dos.writeInt(files.length);
-                        dos.flush();
-                        dos.writeUTF(nombre);              //envia el nombre al servidor 
-                        dos.flush();                       //limpia el flujo de datos
-                        dos.writeLong(tam);                //envia el tamaño del archivo
-                        dos.flush();  
-
-                        byte[] b = new byte[1024];         //array donde se guardara lo leido del archivo
-                        long enviados = 0;
-                        int n;
-                        while(enviados < tam)              //mientras los bytes enviados sean menor que el tamaño
-                        {
-                            n = dis.read(b);               //lee lo que tiene de contenido el archivo en bytes
-                            dos.write(b,0,n);          //escribe lo que tiene el array 
-                            dos.flush();
-                            enviados = enviados + n;       
-                            
-                        }
-                        System.out.println("Archivo " + nombre + " enviado" );
-                        cl.close();
-                        dis.close();
-                        dos.close();
-                        e = e +1;
-                    }
-                    if(e == files.length)
-                    {
-                        s.close();
-                        sendData(files, args);
-                        break;
-                        
-                    }
-                    
-                }
-                else 
-                {
-                    System.out.println("\n\nHubo un error con el archivo"); // ERROR AL SELECCIONAR EL ARCHIVO
-                }
-                
-            }*/
         }catch (Exception e)
         {
             //System.out.println("Error: " + e);
         }
     }
 
-    public static File[] selectFiles()
+    public static File[] selectFiles()   //FUNCION PARA SELECCIONAR LOS ARCHIVOS, REGRESA UN ARRAY DE TIPO FILE
     {
         System.out.println("\nSelecciona los archivos....\n");
         JFileChooser jf = new JFileChooser(); // SELECCIÓN DE ARCHIVOS
-        jf.setMultiSelectionEnabled(true);
+        jf.setMultiSelectionEnabled(true); //MULTIPLES ARCHIVOS
         int r = jf.showOpenDialog(null);
         if( r == JFileChooser.APPROVE_OPTION)
         {
@@ -182,7 +110,7 @@ public class Server {
         Integer[] existenceProducts = new Integer[files.length]; // EXISTENCIA
     
         try{
-            ServerSocket s = new ServerSocket(3090); // INICIAMOS EL SOCKET EN EL PUERTO 3080
+            ServerSocket s = new ServerSocket(3090); // INICIAMOS EL SOCKET EN EL PUERTO 3090
             for (int h =  0; h < files.length; h++) // HACEMOS UN LOOP PARA EXTRAER CADA DATO DE LOS PRODUCTOS
             {
                 File f = files[h]; // RECORREMOS EL ARRAY QUE TIENE LOS ARCHIVOS
@@ -206,7 +134,7 @@ public class Server {
             }
             for(;;)
             {
-                Socket cl = s.accept();
+                Socket cl = s.accept(); //ACEPTAMOS CONEXION DEL USUARIO DE NUEVO
                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(cl.getOutputStream())); // INICIAMOS FLUJO DE DATOS
                 pw.println(files.length); // ENVIAMOS LA LONGITUD DE ARCHIVOS SELECCIONADOS
                 pw.flush();
@@ -233,7 +161,7 @@ public class Server {
             //System.out.println("Error: " + e);
         }
 
-        server();
+        server(); //YA CONCLUIDO EL ENVIO DE ARCHIVOS Y DATOS VOLVEMOS A MANDAR A LLAMAR LA FUNCION SERVIDOR PARA QUE OTRO USUARIO PUEDA CONECTARSE
         
         
     }

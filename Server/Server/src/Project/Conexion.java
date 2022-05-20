@@ -9,11 +9,9 @@ import javax.swing.JOptionPane;
 
 public class Conexion 
 {
-private static Connection con;
-    
-    private static boolean conectado = false;
-
-    public static Connection conectar()
+    private static Connection con;  //VARIABLE TIPO CONNECTION
+    private static boolean conectado = false; 
+    public static Connection conectar() //FUNCION PARA CONECTAR A ABASE DE DATOS
     {
         
         try 
@@ -43,4 +41,5 @@ private static Connection con;
             throw new RuntimeException("Error al crear la conexión");
         }
     }
+    
 }

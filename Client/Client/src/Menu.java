@@ -1,7 +1,5 @@
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -11,13 +9,15 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 
-public class Menu {
+public class Menu { 
+
+    //ARRAYS PARA DEFINIR LOS PRODUCTOS QUE COMPRA EL USUARIO
     String [] nameProducts;  
     Float [] priceProducts; 
     String [] descriptionProducts;
     Integer [] existenceProducts;
-    public static Integer [] stockProducts = new Integer[10];
-    public static HashMap<Integer, Integer> orele = new HashMap<Integer, Integer>();
+    public static Integer [] stockProducts = new Integer[100];
+    public static HashMap<Integer, Integer> orele = new HashMap<Integer, Integer>();   //CREAMOS UN HASH MAP PARA GUARDAR LA CANTIDAD DE PRODUCTOS 
 
     
 
@@ -30,38 +30,38 @@ public class Menu {
     
     
     
-    public void generateReport(String[] names, Float[] prices, String[] descriptions, Integer[] stockProducts){
+    public void generateReport(String[] names, Float[] prices, String[] descriptions, Integer[] stockProducts){   //FUNCION PARA HACER REPORTES 
         try{
-            PDDocument document = new PDDocument();
-            PDPage page = new PDPage(PDRectangle.A6);
-            document.addPage(page);
-            PDPageContentStream content = new PDPageContentStream(document, page);
+            PDDocument document = new PDDocument();  //CREAMOS NUEVO DOCUMENTO
+            PDPage page = new PDPage(PDRectangle.A6);  //CREAMOS UNA PAGINA 
+            document.addPage(page); //AGREGAMOS LA PAGINA
+            PDPageContentStream content = new PDPageContentStream(document, page); //CREAMOS OBJETO
 
-            content.beginText();
-            content.setFont(PDType1Font.TIMES_BOLD,30);
-            content.newLineAtOffset(90, page.getMediaBox().getHeight()-50);
-            content .showText("TICKET");
-            content.endText();
+            content.beginText();  //COMIENZO DE ESCRIBIR TEXTO
+            content.setFont(PDType1Font.TIMES_BOLD,30);  //TAMAÑO Y TIPO DE LETRA
+            content.newLineAtOffset(90, page.getMediaBox().getHeight()-50); //POSICION
+            content .showText("TICKET"); //TEXTO
+            content.endText();  //CERRAMOS EL TEXTO
 
-            float total = 0.0f;
+            float total = 0.0f;   //FUNCION PARA OBTENER EL TOTAL DE LO COMPRADO
             for(int i = 0; i<this.nameProducts.length; i++){
                 total = total + (this.priceProducts[i] * stockProducts[i]);
                 
             }
-
-            content.beginText();
+ 
+            content.beginText();   //TEXTO PARA DEFNIR EL TOTAL
             content.setFont(PDType1Font.TIMES_BOLD,20);
             content.newLineAtOffset(33, page.getMediaBox().getHeight()-340);
             content .showText("TOTAL: $" + total);
             content.endText();
 
-            content.beginText();
+            content.beginText();   //CARACTERISTICAS DEL PRODUCTO
             content.setFont(PDType1Font.TIMES_BOLD,10);
             content.newLineAtOffset(33, page.getMediaBox().getHeight()-100);
             content .showText("Nombre          Precio          Descripción            Cantidad");
             content.endText();
             int counter = 10;
-            for(int i = 0; i< names.length; i++)
+            for(int i = 0; i< names.length; i++) //RECORREMOS EL ARRAY QUE CONTIENE TODOS LOS DATOS DE LOS PRODUCTOS COMPRADOS
             {
                 if(stockProducts[i] == 0)
                 {
@@ -71,47 +71,47 @@ public class Menu {
                 {
                     content.beginText();
                     content.setFont(PDType1Font.TIMES_BOLD,10);
-                    content.newLineAtOffset(33, page.getMediaBox().getHeight()-(130 + counter));
+                    content.newLineAtOffset(33, page.getMediaBox().getHeight()-(130 + counter));  //NOMBRES DE LOS PRODUCTOS
                     content .showText(this.nameProducts[i]);
                     content.endText();
     
     
                     content.beginText();
                     content.setFont(PDType1Font.TIMES_BOLD,10);
-                    content.newLineAtOffset(98, page.getMediaBox().getHeight()-(130 + counter));
+                    content.newLineAtOffset(98, page.getMediaBox().getHeight()-(130 + counter));   //PRECIO DE LOS PRODUCTOS
                     content .showText("" + this.priceProducts[i]);
                     content.endText();
     
                     content.beginText();
                     content.setFont(PDType1Font.TIMES_BOLD,10);
-                    content.newLineAtOffset(145, page.getMediaBox().getHeight()-(130 + counter));
+                    content.newLineAtOffset(145, page.getMediaBox().getHeight()-(130 + counter));   //DESCRIPCION DE LOS PRODUCTOS
                     content .showText("" +this.descriptionProducts[i]);
                     content.endText();
     
                     content.beginText();
                     content.setFont(PDType1Font.TIMES_BOLD,10);
-                    content.newLineAtOffset(240, page.getMediaBox().getHeight()-(130 + counter));
+                    content.newLineAtOffset(240, page.getMediaBox().getHeight()-(130 + counter));  //CANTIDAD QUE EL USUARIO COMPRO
                     content .showText("" + stockProducts[i]);
                     content.endText();
     
-                    counter = counter + 10;
+                    counter = counter + 10;  //COUNTER PARA AUMETAR EL ESPECIO ENTRE PRODUCTO Y PRODUCTO
                 }
     
                 
             }
-            content.close();
+            content.close();  //CERRAMOS EL CONTENIDO
                 
                 
 
-            document.save("/Users/miguelagc/Desktop/REDES 2/Project/Client/report.pdf");
+            document.save("/Users/miguelagc/Desktop/REDES 2/Project/Client/report.pdf");  //ESPECIFICAMOS LA RUTA
 
 
         }catch(Exception e){
-            System.out.println("Errorsito: " + e);
+            System.out.println("Error: " + e);
         }
     }
     
-    public void buyCar(int counterCar){
+    public void buyCar(int counterCar){   //FUNCION PARA COMPRAR EL CARRITO
         System.out.println("\n\n\n-------------- TIENDA ---------------");
         System.out.println("------------ COMPRAR CARRITO ------------\n");
         int counter = 0;
@@ -124,7 +124,7 @@ public class Menu {
             else
             {
                 counter = counter + 1;
-                System.out.println(counter + ")  " + this.nameProducts[i] + "\t\t" + this.priceProducts[i] + "\t\t" + this.descriptionProducts[i] + "\t\t" + stockProducts[i]);
+                System.out.println(counter + ")  " + this.nameProducts[i] + "\t\t" + this.priceProducts[i] + "\t\t" + this.descriptionProducts[i] + "\t\t" + stockProducts[i]);  //MOSTRAMOS LOS PRODUCTOS
             }
             
         }
@@ -150,7 +150,7 @@ public class Menu {
                         m.showMenu(counterCar);
                         break;
                     case 2:
-                        editCar(counterCar);
+                        editCar(counterCar);  //MANDA A LLAMAR PARA EDITAR EL CARRITO
                         break;
                     case 4:
                         break;
@@ -169,7 +169,7 @@ public class Menu {
         int optionMenu = 0;
         System.out.println("\n\n\n-------------- TIENDA ---------------");
         System.out.println("------------ EDITAR UNIDADES ------------\n");
-        for(Integer key:orele.keySet())
+        for(Integer key:orele.keySet())   //LENAMOS UN HASH MAP CON UN ID Y EL NOMBRE DEL PRODUCTO
         {
             System.out.println(key + "\t\t" );
         }
@@ -181,11 +181,11 @@ public class Menu {
             }
             else
             {
-                System.out.println(i + ")  " + this.nameProducts[i] + "\t\t" + this.priceProducts[i] + "\t\t" + this.descriptionProducts[i] + "\t\t" + stockProducts[i]);
+                System.out.println(i + ")  " + this.nameProducts[i] + "\t\t" + this.priceProducts[i] + "\t\t" + this.descriptionProducts[i] + "\t\t" + stockProducts[i]);  //MOSTRAMOS PRODUCTOS
             }
             
         }
-        System.out.print("\nELIGE EL PRODUCTO PARA EDITAR UNIDADES: "); //SELECCION DEL PRODUCTO A ELIMINAR
+        System.out.print("\nELIGE EL PRODUCTO PARA EDITAR UNIDADES: "); //SELECCION DEL PRODUCTO A EDITAR
         Scanner in = new Scanner(System.in);
         optionMenu = in.nextInt();
         if(optionMenu >4 || optionMenu<0){ //VALIDACION DE LOS DATOS
@@ -194,7 +194,7 @@ public class Menu {
         }else{
             this.existenceProducts[optionMenu] = this.existenceProducts[optionMenu] + stockProducts[optionMenu]; //EL STOCK TOTAL SE REESTABLECE
             int cantUnit = 0;
-            System.out.print("\nNUEVAS UNIDADES: "); //SELECCION DEL PRODUCTO A ELIMINAR
+            System.out.print("\nNUEVAS UNIDADES: "); //SELECCION DEL PRODUCTO A EDITAR
             Scanner inn = new Scanner(System.in);
             cantUnit = inn.nextInt();
             if(cantUnit > this.existenceProducts[optionMenu])
@@ -216,14 +216,19 @@ public class Menu {
 
             Menu m = new Menu(nameProducts, priceProducts, descriptionProducts, existenceProducts); //MANDAMOS A LLAMAR A OTRO MENU
             m.showMenu(counterCar);
+            inn.close();
         }
+
+
+        in.close();
+        
     }
 
     public void deleteProduct(int counterCar){  //FUNCION DE ELIMINAR EL PRODUCTO
         int optionMenu = 0;
         System.out.println("\n\n\n-------------- TIENDA ---------------");
         System.out.println("------------ ELIMINAR PRODUCTOS ------------\n");
-        for(Integer key:orele.keySet())
+        for(Integer key:orele.keySet())  ////LENAMOS UN HASH MAP CON UN ID Y EL NOMBRE DEL PRODUCTO
         {
             System.out.println(key + "\t\t" );
         }
@@ -235,7 +240,7 @@ public class Menu {
             }
             else
             {
-                System.out.println(i + ")  " + this.nameProducts[i] + "\t\t" + this.priceProducts[i] + "\t\t" + this.descriptionProducts[i] + "\t\t" + stockProducts[i]);
+                System.out.println(i + ")  " + this.nameProducts[i] + "\t\t" + this.priceProducts[i] + "\t\t" + this.descriptionProducts[i] + "\t\t" + stockProducts[i]);  //MOSTRAMOS PRODUCTOS
             }
             
         }
@@ -259,12 +264,14 @@ public class Menu {
             m.showMenu(counterCar);
         }
 
+        in.close();
+
 
 
 
     }
     
-    public void editCar(int counterCar){
+    public void editCar(int counterCar){   //FUNCION PARA EDITAR EL CARRITO
         System.out.println("\n\n\n---------------- TIENDA ----------------");
             System.out.println("------------ EDITAR CARRITO -------------\n");
         int counter = 0;
@@ -277,7 +284,7 @@ public class Menu {
             else
             {
                 counter = counter + 1;
-                System.out.println(this.nameProducts[i] + "\t\t" + this.priceProducts[i] + "\t\t" + this.descriptionProducts[i] + "\t\t" + stockProducts[i]);
+                System.out.println(this.nameProducts[i] + "\t\t" + this.priceProducts[i] + "\t\t" + this.descriptionProducts[i] + "\t\t" + stockProducts[i]); //MOSTRAMOS LOS PRODUCTOS
             }
             
         }
@@ -297,13 +304,13 @@ public class Menu {
             }else{
                 switch(optionMenu){
                     case 1:
-                        editUnits(counterCar); //MANDA A LLAMAR A AGREGAR LOS PRODUCTS
+                        editUnits(counterCar); //MANDA A LLAMAR LA FUNCION QUE EDITA EL PRODUCTO AGREGADO AL CARRITO
                         break;
                     case 2: 
-                        addProduct(counterCar);
+                        addProduct(counterCar);  //AGREGAR PRODUCTOS
                         break;
                     case 3:
-                        deleteProduct(counterCar);
+                        deleteProduct(counterCar); //ELIMINAR PRODUCTOS
                         break;
                     case 4:
                         Menu m = new Menu(nameProducts, priceProducts, descriptionProducts, existenceProducts); //MANDAMOS A LLAMAR A OTRO MENU
@@ -322,7 +329,7 @@ public class Menu {
 
     }
 
-    public void showCar(int counterCar){
+    public void showCar(int counterCar){   //FUNCION PARA MOSTRAR LOS PRODUCTOS QUE LLEVA EL USUARIO EN EL  CARRITO
         if(counterCar == 0)
         {
             System.out.println("\n\n\n---------------- TIENDA ----------------");
@@ -332,18 +339,18 @@ public class Menu {
         {
             System.out.println("\n\n\n---------------- TIENDA ----------------");
             System.out.println("-------------- TU CARRITO ---------------\n");
-            System.out.println("Nombre \t\tPrecio \tDescripcion \t\tUnidades\n"); 
+            System.out.println("Nombre \t\tPrecio \tDescripcion \t\tUnidades\n");   //MOSTRAMOS LOS PRODUCTOS
             int counter = 0;
             for(int i = 0; i<nameProducts.length; i++)
             {
-                if(stockProducts[i] == 0)
+                if(stockProducts[i] == 0)  //COMO EN LOS ARRAY HAY ESPACIOS EN 0 SE HACE UNA VERIFICACION
                 {
                     continue;
                 }
                 else
                 {
                     counter = counter + 1;
-                    System.out.println(this.nameProducts[i] + "\t\t" + this.priceProducts[i] + "\t\t" + this.descriptionProducts[i] + "\t\t" + stockProducts[i]);
+                    System.out.println(this.nameProducts[i] + "\t\t" + this.priceProducts[i] + "\t\t" + this.descriptionProducts[i] + "\t\t" + stockProducts[i]);  //MOSTRAMOS PRODUCTOS
                 }
                 
             }
@@ -367,10 +374,10 @@ public class Menu {
                         addProduct(counterCar); //MANDA A LLAMAR A AGREGAR LOS PRODUCTS
                         break;
                     case 2: 
-                        editCar(counterCar);  //MANDA A LLAMAR PARA MOSTRAR EL CARRITO
+                        editCar(counterCar);  //MANDA A LLAMAR PARA EDITAR EL CARRITO
                         break;
                     case 3: 
-                        buyCar(counterCar);
+                        buyCar(counterCar); //MANDA A LLAMR PARA FINALIZAR LA COMPRA
                         break;
                     case 4:
                         break;
@@ -494,13 +501,13 @@ public class Menu {
             }else{
                 switch(optionMenu){
                     case 1:
-                        addProduct(counterCar); //MANDA A LLAMAR A AGREGAR LOS PRODUCTS
+                        addProduct(counterCar); //MANDA A LLAMAR A AGREGAR LOS PRODUCTOS
                         break;
                     case 2: 
                         showCar(counterCar);  //MANDA A LLAMAR PARA MOSTRAR EL CARRITO
                         break;
                     case 3: 
-                        buyCar(counterCar);
+                        buyCar(counterCar);  //MANDA A LLAMAR PARA CONCLUIR LA COMPRA 
                         break;
                     case 4:
                         break;
