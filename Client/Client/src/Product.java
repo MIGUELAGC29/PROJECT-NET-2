@@ -12,6 +12,7 @@ public class Product {
         this.price = price;
         this.description = description;
         this.existence = existence;
+        
 
         
     }
