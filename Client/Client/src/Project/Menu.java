@@ -1,6 +1,12 @@
+package Project;
 
 import java.util.HashMap;
 import java.util.Scanner;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -28,9 +34,50 @@ public class Menu {
         this.existenceProducts = existenceProducts;
     }
     
+    public void updateProduct(String[] nameProducts,  Integer[] existenceProducts)
+    {
+        
+        try{
+            for(int i = 0; i< nameProducts.length; i++)
+            {
+                String select = "SELECT Existence FROM Product WHERE Name = \'" + nameProducts[i] + "\';";
+                Connection cn = null; // VARIABLE DE CONEXION A BD
+                PreparedStatement pst = null; // VARIABLE DE CONEXION A BD
+                ResultSet rs = null; // VARIABLE DE CONEXION A BD
+                cn = Conexion.conectar(); // VARIABLE DE CONEXION A BD
+                pst = cn.prepareStatement(select); // VARIABLE DE CONEXION A BD
+                rs = pst.executeQuery(); // EJECUCIÓN DEL QUERY DE SQL
+                if (rs.next()) 
+                { // INGRESAMOS VALORES A LOS ARRAYS
     
+                    int stock = rs.getInt("Existence");
+                    int res = stock - existenceProducts[i];
+                    
+                    //Actualizar
+                    String update = "UPDATE Product SET Existence = \'" + res + "\' WHERE Name = \'" + nameProducts[i] + "\';";
+                    Connection cn1 = null; // VARIABLE DE CONEXION A BD
+                    PreparedStatement pst1 = null; // VARIABLE DE CONEXION A BD
+                    ResultSet rs1 = null; // VARIABLE DE CONEXION A BD
+                    cn1 = Conexion.conectar(); // VARIABLE DE CONEXION A BD
+                    pst1 = cn1.prepareStatement(update); // VARIABLE DE CONEXION A BD
+                    pst1.executeUpdate(); // EJECUCIÓN DEL QUERY DE SQL
+                    
+                  
+                    
+                }
+    
+    
+            }
+        }catch(Exception e)
+        {
+            System.out.println("ERROR AL ACTUALIZAR STOCK: " + e);
+        }
+        
+    }
     
     public void generateReport(String[] names, Float[] prices, String[] descriptions, Integer[] stockProducts){   //FUNCION PARA HACER REPORTES 
+        updateProduct(names, stockProducts);
+        
         try{
             PDDocument document = new PDDocument();  //CREAMOS NUEVO DOCUMENTO
             PDPage page = new PDPage(PDRectangle.A6);  //CREAMOS UNA PAGINA 
@@ -404,7 +451,15 @@ public class Menu {
         for(int i = 0; i<nameProducts.length; i++)
             {
                 Product p = new Product(this.nameProducts[i], this.priceProducts[i], this.descriptionProducts[i], this.existenceProducts[i]);   //GENERAMOS UN OBJETO
-                System.out.println((i+1) + ")   " + p.getName() + "\t\t  " + p.getPrice() + "\t\t\t" + p.getDescription() + "\t\t   " + p.getExistence()); //  //SE MUESTRAN  LOS OBJETOS
+                if(p.getExistence() == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    System.out.println((i+1) + ")   " + p.getName() + "\t\t  " + p.getPrice() + "\t\t\t" + p.getDescription() + "\t\t   " + p.getExistence()); //  //SE MUESTRAN  LOS OBJETOS
+                }
+                
 
                 counter = i;
             }
